@@ -1,0 +1,19 @@
+base_url = "https://qdistro.org"
+title = "qdistro"
+description = "A single-tenant Linux distribution with Qubes-inspired seamless app isolation, built on libweston + Wayland + Python/Qt/QML."
+default_language = "en"
+compile_sass = true
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+build_search_index = false
+
+taxonomies = [
+  { name = "tags", feed = true },
+]
+
+[markdown]
+smart_punctuation = true
+
+[extra]
+repo_url = "https://codeberg.org/qdistro/qdistro"
+author = "qdistro"

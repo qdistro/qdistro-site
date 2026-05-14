@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}{{ term.name }} &middot; {{ taxonomy.name | capitalize }} &middot; {{ config.title }}{% endblock %}
+
+{% block content %}
+<article class="section">
+  <h1>{{ taxonomy.name | capitalize }}: <span class="tag">{{ term.name }}</span></h1>
+  <ul class="post-list">
+    {% for post in term.pages %}
+    <li>
+      <time datetime="{{ post.date }}">{{ post.date | date(format='%Y-%m-%d') }}</time>
+      <a href="{{ post.permalink }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</article>
+{% endblock %}

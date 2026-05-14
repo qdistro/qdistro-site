@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} &middot; {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+
+{% block content %}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {% if page.date %}
+    <p class="meta">
+      <time datetime="{{ page.date }}">{{ page.date | date(format='%Y-%m-%d') }}</time>
+      {% if page.taxonomies.tags %}
+       &middot;
+       {% for tag in page.taxonomies.tags %}<a class="tag" href="{{ get_taxonomy_url(kind='tags', name=tag) }}">{{ tag }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
+      {% endif %}
+    </p>
+    {% endif %}
+  </header>
+  {{ page.content | safe }}
+</article>
+{% endblock %}
