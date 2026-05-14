@@ -58,3 +58,7 @@ Body in markdown.
 6. DNS: CNAME `www.qdistro.org` → `qdistro.codeberg.page.`, and either
    ALIAS the apex or A-record it to Codeberg's Pages IPs (see Codeberg
    Pages docs for current addresses).
+
+## License
+
+GPL-3.0-or-later. See [LICENSE](LICENSE).
