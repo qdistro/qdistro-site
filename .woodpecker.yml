@@ -5,8 +5,7 @@ when:
 steps:
   build:
     image: ghcr.io/getzola/zola:v0.22.1
-    commands:
-      - zola build
+    entrypoint: [zola, build]
 
   deploy:
     image: alpine/git:latest
