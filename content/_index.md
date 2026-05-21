@@ -48,5 +48,5 @@ qdwin's protocol XML), then `qdistro`, then `qdshell`.
 
 ## Sister projects
 
-- [qnotebook.org](https://qnotebook.org) — PyQt6 markdown wiki editor
-- [qterminator.org](https://qterminator.org) — Qt port of Terminator
+- [qnotebook](https://codeberg.org/qnotebook/qnotebook) — PyQt6 markdown wiki editor
+- [qterminator](https://codeberg.org/qterminator/qterminator) — Qt port of Terminator
