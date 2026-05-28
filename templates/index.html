@@ -1,22 +1,257 @@
 {% extends "base.html" %}
 
-{% block content %}
-<article class="page home">
-  {{ section.content | safe }}
+{% block description %}A single-tenant Linux desktop with Qubes-inspired, tiered app isolation — SELinux, podman, and KVM — with seamless windowing at every tier, a no-cache sudo replacement, and a fully modifiable Python/Qt/QML userspace.{% endblock %}
 
-  {% set blog = get_section(path="blog/_index.md") %}
-  {% if blog.pages %}
-  <section class="recent">
-    <h2>Recent posts</h2>
-    <ul class="post-list">
-      {% for post in blog.pages | slice(end=5) %}
+{% block content %}
+{% set docs = config.extra.docs_url %}
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Single-tenant · isolation-first Linux</p>
+    <h1>Keep your worlds apart.</h1>
+    <p class="lede">
+      qdistro is a Linux workstation for one person who wants real separation
+      between work, personal, and throwaway apps. Each runs in its own isolation
+      tier — SELinux sandbox, podman container, or KVM virtual machine — yet every
+      window lands on a single seamless desktop.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#try">Try the preview</a>
+      <a class="btn btn-ghost" href="{{ get_url(path='@/different.md') }}">Why qdistro is different</a>
+      <a class="btn btn-ghost" href="{{ config.extra.repo_url }}">Read the source</a>
+    </div>
+    <p class="hero-note">openSUSE Tumbleweed · libweston + Wayland · Python/Qt/QML · GPL-3.0 · v0.1 public test</p>
+  </div>
+</section>
+
+<section class="pillars wrap">
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">🛡️</div>
+    <h3>Tiered isolation</h3>
+    <p>
+      Pick the containment each app gets — from a confined
+      <a href="{{ docs | safe }}/selinux.md">SELinux</a> context, to a rootless
+      <a href="{{ docs | safe }}/containers.md">podman</a> container, to a full
+      <a href="{{ docs | safe }}/isolation-tiers.md">KVM virtual machine</a>. Stronger
+      walls, same desktop.
+    </p>
+  </div>
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">🪟</div>
+    <h3>Seamless windows</h3>
+    <p>
+      Containers and VMs aren't a separate desktop. Each silo runs a nested
+      Wayland compositor; its windows arrive over <code>waypipe</code> and appear
+      as ordinary toplevels — tagged, chromed, and placed by the admin
+      <a href="{{ docs | safe }}/compositor.md">compositor</a>.
+    </p>
+  </div>
+  <div class="card">
+    <div class="card-icon" aria-hidden="true">✎</div>
+    <h3>Modifiable userspace</h3>
+    <p>
+      The shell, apps, session manager, and policy are plain Python + Qt +
+      <a href="{{ docs | safe }}/ui.md">QML</a> — no compile step, no opaque binaries.
+      You, or an LLM, can edit a file and reload it live.
+    </p>
+  </div>
+</section>
+
+<section id="how" class="band">
+  <div class="wrap">
+    <h2>Seamless across every boundary</h2>
+    <p class="section-lede">
+      The admin compositor on tty3 owns all hardware — GPU, inputs, audio,
+      network. Every silo is a <strong>nested compositor</strong> whose surfaces
+      arrive as Wayland clients of admin's. A podman container and a KVM guest use
+      the exact same windowing contract: each toplevel is advertised over
+      <code>qdwin_nested_manager_v1</code> and stamped with a
+      <code>wp_security_context_v1</code> identity, so the broker knows which silo
+      every paste, file, and window belongs to.
+    </p>
+
+    <ol class="ladder">
       <li>
-        <time datetime="{{ post.date }}">{{ post.date | date(format='%Y-%m-%d') }}</time>
-        <a href="{{ post.permalink }}">{{ post.title }}</a>
+        <span class="ladder-step">Tier 0–1</span>
+        <div>
+          <strong>Native &amp; SELinux sandbox</strong>
+          <p>Direct Wayland clients of the admin compositor, confined by an LSM policy. The default for trusted, everyday apps — fully seamless.</p>
+        </div>
       </li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
-</article>
+      <li>
+        <span class="ladder-step">Tier 2</span>
+        <div>
+          <strong>podman container</strong>
+          <p>Rootless user namespace with a nested compositor, dropped capabilities, read-only rootfs, and no host bus. Seamless badged windows.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ladder-step">Tier 3</span>
+        <div>
+          <strong>Separate user (uid silo)</strong>
+          <p>Data silos on their own uid; <code>waypipe</code> bridges the display across a group-gated socket. The primary work / personal / dev split.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ladder-step">Tier 4–5</span>
+        <div>
+          <strong>KVM virtual machine</strong>
+          <p>libvirt + QEMU guests, displayed over <code>waypipe</code> on <code>AF_VSOCK</code> — whole-VM or per-app windows, still sitting on your desktop.</p>
+        </div>
+      </li>
+      <li>
+        <span class="ladder-step">Tier 6</span>
+        <div>
+          <strong>Remote machine</strong>
+          <p>A separate physical box as a remote-output target. Framed, not seamless — for when "another machine" is the point.</p>
+        </div>
+      </li>
+    </ol>
+    <p class="section-lede small">
+      Full detail in <a href="{{ docs | safe }}/isolation-tiers.md">isolation-tiers.md</a>
+      and <a href="{{ docs | safe }}/architecture.md">architecture.md</a>. You pick the
+      tier per app; higher tiers trade a little seamlessness for harder containment.
+    </p>
+  </div>
+</section>
+
+<section class="wrap split">
+  <div class="split-text">
+    <h2>Rethinking <code>sudo</code></h2>
+    <p>
+      Classic <code>sudo</code> caches your approval for 15 minutes — one prompt
+      opens a window where <em>any</em> privileged command runs unseen. qdistro
+      replaces it with <a href="{{ docs | safe }}/sudo.md"><code>qsu</code></a>, which
+      defaults to <strong>single-command approval and zero caching</strong>.
+    </p>
+    <p>
+      Every escalation routes through the admin broker with a scope picker —
+      <em>just once · 1h · 24h · forever · forever-this-exact-argv</em> — prompts
+      on tty3 or your phone, runs with a sanitized environment under
+      <code>no_new_privs</code>, and lands a full row in the audit log. A compat
+      shim keeps scripts that hard-code <code>sudo</code> working.
+    </p>
+  </div>
+  <div class="split-text">
+    <h2>You approve what crosses the line</h2>
+    <p>
+      Clipboard, file transfer, window handoff, and device access between silos
+      are mediated by the <a href="{{ docs | safe }}/admin-approval.md">admin broker</a> —
+      a privileged D-Bus daemon that's the single arbiter of cross-uid actions.
+    </p>
+    <p>
+      Each request shows who's asking, for what, and the silo it came from; the
+      broker re-verifies process identity against <code>/proc</code> before it
+      ever short-circuits a same-silo transfer. Every decision lands in a
+      <a href="{{ docs | safe }}/permissions.md">polkit-backed audit trail</a> you can
+      review or revoke.
+    </p>
+  </div>
+</section>
+
+<section class="wrap split">
+  <div class="split-text">
+    <h2>Runs where you already are</h2>
+    <p>
+      qdistro layers onto a standard <a href="https://get.opensuse.org/tumbleweed/">openSUSE&nbsp;Tumbleweed</a>
+      install rather than replacing your operating system. There's no separate OS
+      to commit to, and you keep your distribution's normal package updates and
+      snapshot rollback.
+    </p>
+  </div>
+  <div class="split-text">
+    <h2>No dedicated hardware needed</h2>
+    <p>
+      Because containment is layered in software rather than anchored to a
+      bare-metal hypervisor, qdistro is just as comfortable running inside a
+      virtual machine. Kicking the tires doesn't have to mean handing over a whole
+      laptop — a spare VM works nicely too.
+    </p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Built on commodity Linux, used as-is</h2>
+    <p class="section-lede">
+      qdistro doesn't reinvent the plumbing. It leans on mainstream primitives and
+      keeps the interesting, modifiable work in userspace.
+    </p>
+    <div class="tech-grid">
+      <div><strong>libweston</strong><span>compositor core (<a href="{{ docs | safe }}/compositor.md">qdwin</a>)</span></div>
+      <div><strong>Wayland + waypipe</strong><span>display transport across silos</span></div>
+      <div><strong>KVM / libvirt</strong><span>the VM isolation tiers</span></div>
+      <div><strong>podman</strong><span>rootless container tier</span></div>
+      <div><strong>SELinux</strong><span>tier-1 sandbox policy</span></div>
+      <div><strong>PipeWire</strong><span>per-client audio &amp; camera</span></div>
+      <div><strong>polkit + D-Bus</strong><span>approval &amp; IPC fabric</span></div>
+      <div><strong>systemd + greetd</strong><span>sessions &amp; login</span></div>
+      <div><strong>btrfs + Snapper</strong><span>snapshots &amp; rollback</span></div>
+    </div>
+    <p class="section-lede small">
+      Read the <a href="{{ docs | safe }}/overview.md">overview</a>,
+      <a href="{{ docs | safe }}/threat-model.md">threat model</a>, and
+      <a href="{{ docs | safe }}/qbus.md">D-Bus conventions</a> — qdistro is explicit
+      about exactly what it protects you from, and what it doesn't.
+    </p>
+  </div>
+</section>
+
+<section class="wrap repos">
+  <h2>The repositories</h2>
+  <p class="section-lede">
+    qdistro ships as a set of small, focused repos rather than one monolith.
+  </p>
+  <ul class="repo-list">
+    <li><a href="https://codeberg.org/qdistro/qdistro">qdistro</a><span>Umbrella — docs, broker, daemons, SDK, admin app, SELinux policy, tests</span></li>
+    <li><a href="https://codeberg.org/qdistro/qdwin">qdwin</a><span>The Wayland compositor — a libweston shell plugin</span></li>
+    <li><a href="https://codeberg.org/qdistro/qdshell">qdshell</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
+    <li><a href="https://codeberg.org/qdistro/qdgreeter">qdgreeter</a><span>The greetd login screen</span></li>
+    <li><a href="https://codeberg.org/qdistro/qdlocker">qdlocker</a><span>Screen locker with fingerprint unlock</span></li>
+    <li><a href="https://codeberg.org/qdistro/qdbrowser">qdbrowser</a><span>Identity-pinned browser integration + extensions</span></li>
+    <li><a href="https://codeberg.org/qterminator/qterminator">qterminator</a><span>Qt terminal (a port of Terminator)</span></li>
+    <li><a href="https://codeberg.org/qnotebook/qnotebook">qnotebook</a><span>PyQt6 markdown wiki editor</span></li>
+    <li><a href="https://codeberg.org/qdistro/qfileman">qfileman</a><span>File manager with cross-silo send-to</span></li>
+  </ul>
+</section>
+
+<section id="try" class="band band-accent">
+  <div class="wrap">
+    <h2>Try the early preview</h2>
+    <p class="section-lede">
+      qdistro is in its first public test. There's no ISO — you start from a clean
+      <a href="https://get.opensuse.org/tumbleweed/">openSUSE&nbsp;Tumbleweed</a>
+      install and run one idempotent bootstrap script that builds the compositor,
+      daemons, and apps in about 20&nbsp;minutes.
+    </p>
+    <pre><code>git clone https://codeberg.org/qdistro/qdistro.git
+git clone https://codeberg.org/qdistro/qdwin.git
+git clone https://codeberg.org/qdistro/qdshell.git
+cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh</code></pre>
+    <p class="section-lede small">
+      A developer preview, not a verified release channel — inputs aren't signed
+      or pinned yet. Run it on a spare laptop and tell us what breaks.
+    </p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{{ config.extra.repo_url }}">Get started on Codeberg</a>
+      <a class="btn btn-ghost" href="{{ get_url(path='@/blog/_index.md') }}">Read the v0.1 notes</a>
+    </div>
+  </div>
+</section>
+
+{% set blog = get_section(path="blog/_index.md") %}
+{% if blog.pages %}
+<section class="wrap recent">
+  <h2>From the blog</h2>
+  <ul class="post-list">
+    {% for post in blog.pages | slice(end=4) %}
+    <li>
+      <time datetime="{{ post.date }}">{{ post.date | date(format='%Y-%m-%d') }}</time>
+      <a href="{{ post.permalink }}">{{ post.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 {% endblock %}

@@ -3,25 +3,46 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  <title>{% block title %}{{ config.title }} — secure, single-tenant Linux{% endblock %}</title>
   <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}">
+  <meta name="theme-color" content="#0e1116">
+  <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock %}">
+  <meta property="og:type" content="website">
   <link rel="stylesheet" href="{{ get_url(path='style.css') }}">
   <link rel="alternate" type="application/atom+xml" title="{{ config.title }}" href="{{ get_url(path='atom.xml', trailing_slash=false) }}">
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="{{ config.base_url }}">{{ config.title }}</a>
-    <nav>
-      <a href="{{ get_url(path='@/blog/_index.md') }}">blog</a>
-      <a href="{{ config.extra.repo_url }}">source</a>
-    </nav>
+    <div class="wrap">
+      <a class="brand" href="{{ config.base_url }}">
+        <span class="brand-mark" aria-hidden="true"></span>{{ config.title }}
+      </a>
+      <nav>
+        <a href="{{ get_url(path='@/different.md') }}">Why different</a>
+        <a href="{{ config.base_url }}/#how">How it works</a>
+        <a href="{{ config.base_url }}/#try">Try it</a>
+        <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a>
+        <a href="{{ config.extra.repo_url }}">Source</a>
+      </nav>
+    </div>
   </header>
   <main>
     {% block content %}{% endblock %}
   </main>
   <footer class="site-footer">
-    <p>&copy; {{ now() | date(format='%Y') }} {{ config.extra.author }} &middot;
-       <a href="{{ get_url(path='atom.xml', trailing_slash=false) }}">feed</a></p>
+    <div class="wrap">
+      <p>
+        <strong>{{ config.title }}</strong> — single-tenant, isolation-first Linux.
+        Free software under GPL-3.0-or-later.
+      </p>
+      <p class="muted">
+        &copy; {{ now() | date(format='%Y') }} {{ config.extra.author }} &middot;
+        <a href="{{ config.extra.repo_url }}">Source</a> &middot;
+        <a href="{{ get_url(path='@/blog/_index.md') }}">Blog</a> &middot;
+        <a href="{{ get_url(path='atom.xml', trailing_slash=false) }}">Feed</a>
+      </p>
+    </div>
   </footer>
 </body>
 </html>
