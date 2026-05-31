@@ -53,9 +53,12 @@ Body in markdown.
    (Settings → Deploy Keys, check "Enable Write Access").
 4. Enable Woodpecker on the repo at <https://ci.codeberg.org>, add the
    private key as a secret named `deploy_key`.
-5. Push to `main`. The pipeline builds with Zola and force-pushes
+5. Add Codeberg's pinned SSH host-key line as a secret named
+   `codeberg_host_key` (for example, a `codeberg.org ssh-ed25519 ...` line
+   verified out-of-band from Codeberg's published fingerprints).
+6. Push to `main`. The pipeline builds with Zola and force-pushes
    `public/` to the `pages` branch.
-6. DNS: CNAME `www.qdistro.org` → `qdistro.codeberg.page.`, and either
+7. DNS: CNAME `www.qdistro.org` → `qdistro.codeberg.page.`, and either
    ALIAS the apex or A-record it to Codeberg's Pages IPs (see Codeberg
    Pages docs for current addresses).
 
