@@ -1,2 +1,37 @@
+# Build & dist
 public/
+build/
+dist/
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.npm
+package-lock.json.backup
+
+# Python (if applicable)
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+.venv/
+venv/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor & IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cache/
+.zed
+
+# Generated/temp files
 static/processed_images/
+*.log
