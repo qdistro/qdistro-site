@@ -2,6 +2,14 @@
 
 Static site for qdistro.org, built with [Zola](https://www.getzola.org).
 
+## Role in qdistro
+
+This repo is the public website, not the product documentation source of truth.
+Architecture, security model, developer setup, and component contracts live in
+[../qdistro/doc](../qdistro/doc) and the sibling component READMEs. The site
+should present the current project narrative and release notes without becoming
+a second, divergent manual.
+
 ## Local
 
 ```sh
