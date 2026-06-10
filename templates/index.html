@@ -149,6 +149,50 @@
   </div>
 </section>
 
+<section class="band">
+  <div class="wrap">
+    <h2>Updates that can't break your apps <span class="badge-soon">in development — shipping before 1.0</span></h2>
+    <p class="section-lede">
+      Every silo's software comes from a <a href="{{ docs | safe }}/templates.md">template</a> —
+      a versioned installation with <strong>no config and no user data</strong>. Updates never
+      touch the version you're running: they build a candidate clone, test it in an empty room,
+      and only flip your desktop icon to the new version after it passes.
+    </p>
+    <div class="pillars">
+      <div class="card">
+        <h3>Self-healing silos</h3>
+        <p>
+          Each <a href="{{ docs | safe }}/silos.md">silo</a> declares health checks, recovery
+          actions, and honest rollback policy. Cheap probes watch live workloads; deep
+          validations — "save a document, reopen it, is it still there?" — run only against
+          disposable clones and test accounts, never your real data.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Bad updates never land</h3>
+        <p>
+          A vendor update breaks Save? The save-reopen validation fails <em>in the candidate</em>,
+          the promotion never happens, and your launcher keeps opening the version that works.
+          Recovery isn't a procedure — nothing stable was ever touched.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Untrusted installers, empty rooms</h3>
+        <p>
+          npm postinstall scripts and vendor auto-updaters execute only inside candidate
+          builds that contain no secrets, no credentials, no documents. They can be caught
+          poisoning the update — they can't steal what isn't there.
+        </p>
+      </div>
+    </div>
+    <p class="section-lede small">
+      The design is specified in <a href="{{ docs | safe }}/templates.md">templates.md</a> and
+      the first backend (podman, dev toolchains) is being built in the open. This is a promise
+      ahead of delivery — read the docs, hold us to them.
+    </p>
+  </div>
+</section>
+
 <section class="wrap split">
   <div class="split-text">
     <h2>Runs where you already are</h2>
