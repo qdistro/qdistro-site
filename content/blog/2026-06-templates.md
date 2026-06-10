@@ -1,7 +1,7 @@
 +++
-title = "Templates: updates that can't break your apps"
+title = "Templates: updates that prove themselves before they land"
 date = 2026-06-10
-description = "qdistro's next big promise — every silo's software becomes a versioned template, updated by validation and promotion instead of in-place mutation. Specified now, shipping before 1.0."
+description = "qdistro's next big promise — templated workloads get versioned software, updated by validation and promotion instead of in-place mutation. Specified now, shipping before 1.0."
 [taxonomies]
 tags = ["design", "templates", "silos"]
 +++
@@ -60,10 +60,11 @@ is never complete — passing save-reopen doesn't prove every macro works.
 Cloud-synced data can't be rolled back by any local system, and we say so
 per silo instead of pretending. Apps whose plugins and profiles blur the
 software/state line (looking at you, IDE marketplaces) get a weaker,
-snapshot-based path and are labeled as such. And first-launch profile
-migrations — the one step that must touch real state — run under a declared
-network policy with a pre-migration snapshot, so even that step has a
-defined undo.
+snapshot-based path and are labeled as such. And in the full design, first-launch
+profile migrations — the one step that must touch real state — will run
+under a declared network policy with a pre-migration snapshot, so even that
+step has a defined undo (this lands later in the rollout, after the first
+backend).
 
 ## When
 
