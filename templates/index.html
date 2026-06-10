@@ -153,10 +153,13 @@
   <div class="wrap">
     <h2>Updates that can't break your apps <span class="badge-soon">in development — shipping before 1.0</span></h2>
     <p class="section-lede">
-      Every silo's software comes from a <a href="{{ docs | safe }}/templates.md">template</a> —
+      Templated workloads — dev toolchains, containers, VMs, and cleanly packaged desktop
+      apps — get their software from a <a href="{{ docs | safe }}/templates.md">template</a>:
       a versioned installation with <strong>no config and no user data</strong>. Updates never
       touch the version you're running: they build a candidate clone, test it in an empty room,
-      and only flip your desktop icon to the new version after it passes.
+      and only flip your desktop icon to the new version after it passes. (Plugin-heavy apps
+      whose profiles blur the software/state line keep a snapshot-based path — and are labeled
+      as such.)
     </p>
     <div class="pillars">
       <div class="card">
@@ -181,7 +184,8 @@
         <p>
           npm postinstall scripts and vendor auto-updaters execute only inside candidate
           builds that contain no secrets, no credentials, no documents. They can be caught
-          poisoning the update — they can't steal what isn't there.
+          poisoning the update — but your documents, sessions, and keys aren't in the room
+          to steal.
         </p>
       </div>
     </div>

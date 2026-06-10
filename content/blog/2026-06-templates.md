@@ -26,10 +26,12 @@ until the new one proves itself.
 
 ## The model
 
-Every silo's software comes from a **template** — a versioned installation
-containing no configuration and no user data. Your silo owns only its
-config, state, and authority; the binding between silo and template version
-is one small file.
+A templated silo gets its software from a **template** — a versioned
+installation containing no configuration and no user data. This covers dev
+toolchains, containers, VMs, and cleanly packaged desktop apps; plugin-heavy
+apps whose profiles blur the software/state line keep a snapshot-based path
+and are labeled as such. Your silo owns only its config, state, and
+authority; the binding between silo and template version is one small file.
 
 Updates never mutate the version you're running:
 
@@ -40,8 +42,8 @@ Updates never mutate the version you're running:
    dedicated test accounts, never your sessions.
 3. Untrusted installer code — npm postinstall scripts, vendor auto-updaters
    — runs **only inside the candidate**, which holds no secrets, no
-   credentials, no documents. It can be caught poisoning the update; it
-   cannot steal what isn't there.
+   credentials, no documents. It can be caught poisoning the update — but
+   your documents, sessions, and keys aren't in the room to steal.
 4. Only after the candidate passes (plus an audit gate for untrusted
    sources) does your launcher flip to it, at the next natural restart. You
    never wait for an upgrade.
