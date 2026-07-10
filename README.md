@@ -34,7 +34,7 @@ templates/
   page.html              individual post
 sass/style.scss          compiled to /style.css
 .domains                 codeberg pages custom domain config
-.woodpecker.yml          CI: build + push to `pages` branch
+.woodpecker/deploy.yml   CI: build + push to `pages` branch
 ```
 
 ## Add a post
