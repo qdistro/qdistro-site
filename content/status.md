@@ -14,8 +14,8 @@ are listed as **planned**, not quietly shipped.
 
 A note on dates: v1 is **pre-release**. Everything under *In v1* is implemented
 and is going through the release test battery; this page describes the v1
-**scope**, not a shipped-and-signed build. When a signed release manifest exists,
-the [install guide](@/install.md) is the trust anchor.
+**scope**, not a shipped-and-signed build. When a signed release manifest
+exists, the signature-verified install flow is the trust anchor.
 
 ## In v1
 
@@ -58,13 +58,13 @@ none of them are enabled by the release install.
 |---|---|
 | Recall (capture + timeline) | **Cut from v1.** Capture and the viewer are disabled and the bridge `recall.push` op is off; the design is kept for a later version. |
 | Phone companion (presence / 2FA) | **Cut from v1.** Pairing/presence code stays in the tree but is **not installed or enabled** by the release bootstrap profile. |
-| Installable ISO image | **Cut from v1.** v1 installs from source via the [bootstrap](@/install.md); the image track (themes, firstboot, image gates) continues post-v1. |
+| Installable ISO image | **Cut from v1.** v1 installs from source via the bootstrap script; the image track (themes, firstboot, image gates) continues post-v1. |
 | Scheduled backup / export / restore | **Planned, not shipped.** The docs once described a backup timer, export UI, and restore pipeline as product behavior — none ship in v1. A signed-manifest *source* verify/restore primitive exists, but the end-to-end user backup story is later. |
 | Network VM swap-in | Planned. Moves 802.11/DHCP/DNS off the host kernel (see *Per-silo VPN* above). |
 | Workflow engine, portal backend, cross-machine RDP, scanner, virtual-camera ML, lineage store, manifest registry | Post-v1 north stars, deferred by design. |
 
 ---
 
-See [how qdistro is different](@/different.md) for the design ideas behind these
-features, or the [install guide](@/install.md) for the hardened release-install
-flow — signature-verified once the v1 key and manifest are published.
+See the [threat model](@/threat-model.md) for what these features do and do
+not protect against. The hardened release-install flow becomes
+signature-verified once the v1 key and manifest are published.

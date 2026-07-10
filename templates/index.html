@@ -69,7 +69,6 @@
       The full picture: <a href="{{ docs | safe }}/overview.md">overview</a> ·
       <a href="{{ docs | safe }}/architecture.md">architecture</a> ·
       <a href="{{ get_url(path='@/threat-model.md') }}">threat model</a> ·
-      <a href="{{ get_url(path='@/different.md') }}">how it differs from Qubes</a> ·
       <a href="{{ get_url(path='@/status.md') }}">honest feature status</a>.
     </p>
   </div>
@@ -88,8 +87,7 @@
     machine, not a host whose isolation you rely on. Bare-metal
     installs follow the same steps but are currently untested. This is a
     development preview, not a verified release channel — inputs aren't signed
-    or pinned yet (the <a href="{{ get_url(path='@/install.md') }}">install
-    guide</a> documents the signature-verified release path).
+    or pinned yet.
   </p>
   <pre><code># inside a fresh Tumbleweed Minimal/Server VM, as user "admin":
 git clone https://codeberg.org/qdistro/qdistro.git

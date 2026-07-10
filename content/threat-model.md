@@ -90,5 +90,4 @@ Hardening that is planned but explicitly **not** in v1 — listed so the scope i
   otherwise the vault ships password-only.
 - **Adversarial-session hardening** — for genuinely hostile code, run it in a VM tier.
 
-See [what ships in v1](@/status.md) for the per-feature breakdown, or
-[how qdistro is different](@/different.md) for the design behind the model.
+See [what ships in v1](@/status.md) for the per-feature breakdown.
