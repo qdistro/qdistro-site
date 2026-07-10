@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block description %}qdistro is a single-tenant Linux workstation with Qubes-inspired, tiered app isolation — SELinux, podman, and KVM — seamless windowing at every tier, and a fully modifiable Python/Qt/QML userspace. In development; tested in libvirt VMs.{% endblock %}
+{% block description %}qdistro is a single-tenant Linux workstation with Qubes-inspired, tiered app isolation — SELinux, podman, and KVM — seamless windowing at every tier, and a modifiable Python/Qt/QML userspace. In development; tested in libvirt VMs.{% endblock %}
 
 {% block content %}
 {% set docs = config.extra.docs_url %}
@@ -10,9 +10,9 @@
     <p class="eyebrow">Single-tenant · isolation-first Linux · in development</p>
     <h1>qdistro</h1>
     <p class="lede">
-      A Linux workstation for one person who wants real separation between
-      work, personal, and throwaway contexts on a single seamless desktop,
-      with a userspace that stays readable and modifiable down to every line.
+      A single-tenant Linux workstation that separates work, personal, and
+      throwaway contexts on one seamless desktop, with a userspace that is
+      readable and modifiable at the source level.
     </p>
     <p class="hero-note">openSUSE Tumbleweed · libweston + Wayland · Python/Qt/QML · GPL-3.0</p>
   </div>
@@ -33,14 +33,14 @@
         <span class="ladder-step">Goal 1</span>
         <div>
           <strong>Tiered isolation, chosen per app</strong>
-          <p>An isolation ladder from a confined <a href="{{ docs | safe }}/selinux.md">SELinux</a> context, through rootless <a href="{{ docs | safe }}/containers.md">podman</a> containers and separate uids, up to <a href="{{ docs | safe }}/isolation-tiers.md">KVM virtual machines</a>. Stronger walls where you need them, lighter ones where you don't.</p>
+          <p>An isolation ladder from a confined <a href="{{ docs | safe }}/selinux.md">SELinux</a> context, through rootless <a href="{{ docs | safe }}/containers.md">podman</a> containers and separate uids, up to <a href="{{ docs | safe }}/isolation-tiers.md">KVM virtual machines</a>. Isolation strength is chosen per app, within admin policy.</p>
         </div>
       </li>
       <li>
         <span class="ladder-step">Goal 2</span>
         <div>
           <strong>Seamless windows across every boundary</strong>
-          <p>Containers and VMs should not be a second desktop. Each silo runs a nested Wayland compositor; its windows arrive over <code>waypipe</code> and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
+          <p>Containers and VMs do not present as a separate desktop session. Each silo runs a nested Wayland compositor; its windows arrive over <code>waypipe</code> and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
         </div>
       </li>
       <li>
@@ -53,15 +53,15 @@
       <li>
         <span class="ladder-step">Goal 4</span>
         <div>
-          <strong>A userspace you (or an LLM) can modify</strong>
+          <strong>A userspace modifiable by humans or LLMs</strong>
           <p>The shell, apps, session manager, and policy are plain Python + Qt + <a href="{{ docs | safe }}/ui.md">QML</a> — no compile step, no opaque binaries. Infrastructure stays commodity C (libweston, PipeWire, systemd, qemu), used as-is, not rewritten.</p>
         </div>
       </li>
       <li>
         <span class="ladder-step">Goal 5</span>
         <div>
-          <strong>A layer, not a fork</strong>
-          <p>qdistro bootstraps on top of a standard <a href="https://get.opensuse.org/tumbleweed/">openSUSE&nbsp;Tumbleweed</a> install via one idempotent script. You keep normal package updates and btrfs/Snapper rollback; everything qdistro adds is an inspectable script or repo.</p>
+          <strong>An overlay on stock Tumbleweed, not a fork</strong>
+          <p>qdistro bootstraps on top of a standard <a href="https://get.opensuse.org/tumbleweed/">openSUSE&nbsp;Tumbleweed</a> install via one idempotent script. Normal package updates and btrfs/Snapper rollback continue to work; everything qdistro adds is an inspectable script or repo.</p>
         </div>
       </li>
     </ol>
@@ -97,12 +97,12 @@ git clone https://codeberg.org/qdistro/qdwin.git
 git clone https://codeberg.org/qdistro/qdshell.git
 cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh</code></pre>
   <p class="section-lede">
-    <strong>The best way to see qdistro actually working is to run the CI GUI
-    tests in a foreground terminal.</strong> The GUI gate boots disposable
-    VMs, drives the real compositor, shell, locker, and permission flows, and
-    writes a report with screenshots. An agent is highly recommended for
-    testing this project: the GUI scenarios are markdown playbooks executed by
-    a coding-agent CLI of your choice, pointed at via <code>QCI_AGENT_CMD</code>.
+    <strong>To see qdistro working, run the CI GUI tests in a foreground
+    terminal.</strong> The GUI gate boots disposable VMs, drives the real
+    compositor, shell, locker, and permission flows, and writes a report with
+    screenshots. Testing this project is agent-driven: the GUI scenarios are
+    markdown playbooks executed by a coding-agent CLI, configured via
+    <code>QCI_AGENT_CMD</code>; without one they are recorded as blocked.
   </p>
   <pre><code>ci/bin/qci preflight                          # check libvirt + host tools
 QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</code></pre>
