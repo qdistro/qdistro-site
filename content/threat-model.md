@@ -11,7 +11,7 @@ fine-grained information-flow noninterference. The model is stated explicitly on
 purpose: several design choices (hide-the-UI vs. sandbox, cooperative vs. enforced
 read-only, one-fingerprint vs. per-user auth) only make sense once you know what is
 and isn't being defended. This page is the public summary; the
-[full threat model](https://codeberg.org/qdistro/qdistro/src/branch/main/doc/threat-model.md)
+[full threat model](https://github.com/qdistro/qdistro/blob/main/doc/threat-model.md)
 in the source tree is authoritative.
 
 A guiding rule: **apps are not trusted to self-report their own security-relevant

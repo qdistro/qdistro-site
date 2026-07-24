@@ -7,7 +7,7 @@ tags = ["design", "templates", "silos"]
 +++
 
 *This post announces a design ahead of its delivery. The model below is fully
-specified in [templates.md](https://codeberg.org/qdistro/qdistro/src/branch/main/doc/templates.md)
+specified in [templates.md](https://github.com/qdistro/qdistro/blob/main/doc/templates.md)
 and the first slice is being built in the open — but as of today you cannot
 install it. We're publishing the promise first so you can hold us to it.*
 
