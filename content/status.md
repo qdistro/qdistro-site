@@ -32,7 +32,7 @@ Implemented, in scope, and going through the release verification passes.
 | Printing | CUPS in an isolated VM. |
 | Per-silo VPN | An interim host-netns backend. **What it does not protect:** 802.11, DHCP, and DNS parsing still run on the host kernel — the network-VM swap-in that closes this is post-v1. |
 | Templates + promotion | Build → probe → validate → gated promotion, with per-silo btrfs state snapshots and crash-consistent rollback. Lifecycle decisions are recorded **journal-first** (the journal plus on-disk evidence are the durable audit record). |
-| Browser bridge + extensions | A frozen v1 operation set — `ping` and `containers.*` only — with the Chrome-family and Firefox extensions. |
+| Browser bridge + extensions | A frozen v1 operation set — `ping` and `containers.*` only — with the Chrome-family and Firefox extensions. **How you install them in v1:** manually. There is no signed extension channel — the Chrome-family extension is loaded unpacked in developer mode, and the Firefox one is a temporary add-on that has to be re-loaded after every browser restart. See *Planned* below. |
 | Firefox containers | Round-trip container integration, relay, and CLI. |
 | Filesystem / rollback | Per-user btrfs subvolumes with Snapper rollback. **Not in v1:** the scheduled backup service, export UI, and restore pipeline — see *Planned* below. v1 does not promise automated backup or data-loss protection. |
 | First-party apps | qterminator, qnotebook, qfileman, and qdbrowser. |
@@ -60,6 +60,7 @@ none of them are enabled by the release install.
 | Phone companion (presence / 2FA) | **Cut from v1.** Pairing/presence code stays in the tree but is **not installed or enabled** by the release bootstrap profile. |
 | Installable ISO image | **Cut from v1.** v1 installs from source via the bootstrap script; the image track (themes, firstboot, image gates) continues post-v1. |
 | Scheduled backup / export / restore | **Planned, not shipped.** The docs once described a backup timer, export UI, and restore pipeline as product behavior — none ship in v1. A signed-manifest *source* verify/restore primitive exists, but the end-to-end user backup story is later. |
+| Signed extension distribution | **Planned, not shipped.** No AMO-signed xpi, no production CRX signing key, no hosted `update.xml`, no usable force-install deployment (the policy scripts in the extension repos point at paths nothing populates), and no auto-update or revocation channel. v1 users verify the release manifest themselves, build the extension from the pinned source, and load it by hand — nothing checks the artifact at load time, and a security fix reaches them only when they rebuild and re-load it. |
 | Network VM swap-in | Planned. Moves 802.11/DHCP/DNS off the host kernel (see *Per-silo VPN* above). |
 | Workflow engine, portal backend, cross-machine RDP, scanner, virtual-camera ML, lineage store, manifest registry | Post-v1 north stars, deferred by design. |
 
