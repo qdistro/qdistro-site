@@ -93,7 +93,14 @@
 git clone https://github.com/qdistro/qdistro.git
 git clone https://github.com/qdistro/qdwin.git
 git clone https://github.com/qdistro/qdshell.git
-cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh</code></pre>
+cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh --profile=dev</code></pre>
+  <p class="section-lede small">
+    The explicit <code>--profile=dev</code> is required for this preview path.
+    The default <code>daily-driver</code> profile refuses to build from a
+    source tree that is not pinned by a populated, signed release manifest, and
+    no such manifest is published yet — without the flag the bootstrap fails
+    partway through, after it has already installed packages and created users.
+  </p>
   <p class="section-lede">
     <strong>To see qdistro working, run the CI GUI tests in a foreground
     terminal.</strong> The GUI gate boots disposable VMs, drives the real
