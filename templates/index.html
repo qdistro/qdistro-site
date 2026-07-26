@@ -90,10 +90,17 @@
     or pinned yet.
   </p>
   <pre><code># inside a fresh Tumbleweed Minimal/Server VM, as user "admin":
-git clone https://codeberg.org/qdistro/qdistro.git
-git clone https://codeberg.org/qdistro/qdwin.git
-git clone https://codeberg.org/qdistro/qdshell.git
-cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh</code></pre>
+git clone https://github.com/qdistro/qdistro.git
+git clone https://github.com/qdistro/qdwin.git
+git clone https://github.com/qdistro/qdshell.git
+cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh --profile=dev</code></pre>
+  <p class="section-lede small">
+    The explicit <code>--profile=dev</code> is required for this preview path.
+    The default <code>daily-driver</code> profile refuses to build from a
+    source tree that is not pinned by a populated, signed release manifest, and
+    no such manifest is published yet — without the flag the bootstrap fails
+    partway through, after it has already installed packages and created users.
+  </p>
   <p class="section-lede">
     <strong>To see qdistro working, run the CI GUI tests in a foreground
     terminal.</strong> The GUI gate boots disposable VMs, drives the real
@@ -106,7 +113,7 @@ cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh</code></pre>
 QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</code></pre>
   <p class="section-lede small">
     Gate reference, agent-command templating, and triage workflow:
-    <a href="{{ config.extra.repo_url }}/src/branch/main/ci/README.md">ci/README.md</a>.
+    <a href="{{ config.extra.repo_url }}/blob/main/ci/README.md">ci/README.md</a>.
     Found something broken? <a href="{{ config.extra.repo_url }}/issues">File an issue</a>.
   </p>
 </section>
@@ -121,15 +128,15 @@ QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</co
       truth this site deliberately does not duplicate.
     </p>
     <ul class="repo-list">
-      <li><a href="https://codeberg.org/qdistro/qdistro">qdistro</a><span>Umbrella — docs, broker, daemons, SDK, admin app, SELinux policy, CI, tests</span></li>
-      <li><a href="https://codeberg.org/qdistro/qdwin">qdwin</a><span>The Wayland compositor — a libweston shell plugin (mechanism, no policy)</span></li>
-      <li><a href="https://codeberg.org/qdistro/qdshell">qdshell</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
-      <li><a href="https://codeberg.org/qdistro/qdgreeter">qdgreeter</a><span>The greetd login screen</span></li>
-      <li><a href="https://codeberg.org/qdistro/qdlocker">qdlocker</a><span>Screen locker with fingerprint unlock</span></li>
-      <li><a href="https://codeberg.org/qdistro/qdbrowser">qdbrowser</a><span>Identity-pinned browser integration + extensions</span></li>
-      <li><a href="https://codeberg.org/qterminator/qterminator">qterminator</a><span>Qt terminal (a port of Terminator)</span></li>
-      <li><a href="https://codeberg.org/qnotebook/qnotebook">qnotebook</a><span>PyQt6 markdown wiki editor</span></li>
-      <li><a href="https://codeberg.org/qdistro/qfileman">qfileman</a><span>File manager with cross-silo send-to</span></li>
+      <li><a href="https://github.com/qdistro/qdistro">qdistro</a><span>Umbrella — docs, broker, daemons, SDK, admin app, SELinux policy, CI, tests</span></li>
+      <li><a href="https://github.com/qdistro/qdwin">qdwin</a><span>The Wayland compositor — a libweston shell plugin (mechanism, no policy)</span></li>
+      <li><a href="https://github.com/qdistro/qdshell">qdshell</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
+      <li><a href="https://github.com/qdistro/qdgreeter">qdgreeter</a><span>The greetd login screen</span></li>
+      <li><a href="https://github.com/qdistro/qdlocker">qdlocker</a><span>Screen locker with fingerprint unlock</span></li>
+      <li><a href="https://github.com/qdistro/qdbrowser">qdbrowser</a><span>Identity-pinned browser integration + extensions</span></li>
+      <li><a href="https://github.com/qterminator/qdterm">qterminator</a><span>Qt terminal (a port of Terminator)</span></li>
+      <li><a href="https://github.com/qnotebook/qnotebook">qnotebook</a><span>PyQt6 markdown wiki editor</span></li>
+      <li><a href="https://github.com/qdistro/qdfileman">qfileman</a><span>File manager with cross-silo send-to</span></li>
     </ul>
   </div>
 </section>
