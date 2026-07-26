@@ -78,3 +78,28 @@ def test_interim_networking_caveat_is_complete():
 def test_release_is_framed_pre_release_not_done():
     # Honest about state: v1 scope, not a shipped-and-signed build.
     assert "pre-release" in _page()
+
+
+def test_signed_extension_distribution_is_planned_not_shipped():
+    """R4: v1 documents MANUAL extension load. The signed channel (AMO / CRX +
+    update.xml) must live in Planned, and the shipped browser-bridge row must
+    disclose the manual-load reality rather than implying a normal install."""
+    in_v1, experimental, planned = _sections()
+    rows = _planned_rows()
+    signed = next(
+        (r for cap, r in rows.items() if cap.startswith("Signed extension")),
+        None)
+    assert signed, "Signed extension distribution must be a Planned row"
+    assert "Planned, not shipped" in signed
+    for needle in ("AMO", "update.xml", "auto-update"):
+        assert needle in signed, f"signed-distribution row omits {needle!r}"
+    assert "Signed extension distribution" not in in_v1
+    assert "Signed extension distribution" not in experimental
+    # The shipped row must not present the extensions as normally installable.
+    browser_row = next(
+        (line for line in in_v1.splitlines()
+         if line.startswith("| Browser bridge")), None)
+    assert browser_row, "shipped browser-bridge row missing"
+    assert "manual" in browser_row.lower()
+    assert "no signed extension channel" in browser_row.lower()
+    assert "re-loaded after every browser restart" in browser_row
