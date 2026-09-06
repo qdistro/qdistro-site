@@ -75,17 +75,23 @@
 </section>
 
 <section id="try" class="wrap">
-  <h2>Trying it today: run it in a VM, test it through CI</h2>
+  <h2>Trying it today</h2>
   <p class="section-lede">
-    qdistro is in active development and changes fast. The supported way to
-    try it is <strong>inside a libvirt / virt-manager VM</strong> — the
-    full-stack test suites run in disposable libvirt VMs.
+    Tester releases are a <strong>raw disk image</strong> (not an installable
+    ISO): write it to a 32&nbsp;GB UEFI stick or boot it as a VM disk. Dev
+    profile, default password <code>qdistro</code>, sshd off, not signed.
+    Flash line, VM line, checksum, and caveats:
+    <a href="{{ get_url(path='@/download.md') }}">download page</a>.
+    A public GitHub Release is not published yet.
+  </p>
+  <p class="section-lede">
+    The from-source path below is for developers iterating on a Tumbleweed
+    VM. The full-stack test suites run in disposable libvirt VMs.
     <strong>Nested virtualization must be
     enabled</strong> on the host (the VM-based isolation tiers run VMs inside
     the VM); note that nested virtualization enlarges the hypervisor attack
     surface and can be a security risk for the host, so use a development
-    machine, not a host whose isolation you rely on. Bare-metal
-    installs follow the same steps but are currently untested. This is a
+    machine, not a host whose isolation you rely on. This is a
     development preview, not a verified release channel — inputs aren't signed
     or pinned yet.
   </p>

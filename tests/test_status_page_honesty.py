@@ -103,3 +103,67 @@ def test_signed_extension_distribution_is_planned_not_shipped():
     assert "manual" in browser_row.lower()
     assert "no signed extension channel" in browser_row.lower()
     assert "re-loaded after every browser restart" in browser_row
+
+
+def test_tty4_lxqt_escape_hatch_is_not_shipped():
+    in_v1, _, _ = _sections()
+    assert "tty4" in in_v1
+    assert "no tty4 LXQt escape hatch" in in_v1
+    assert "escape hatch on tty4" not in in_v1
+
+
+def test_printing_is_not_an_isolated_cups_vm():
+    in_v1, _, _ = _sections()
+    printing = next(
+        (line for line in in_v1.splitlines() if line.startswith("| Printing")),
+        None)
+    assert printing, "Printing row missing from In v1"
+    assert "isolated CUPS VM" in printing
+    assert "never built" in printing
+    assert "CUPS in an isolated VM" not in printing
+
+
+def test_admin_app_is_not_installed_and_has_no_snapshots_printers_panels():
+    in_v1, _, _ = _sections()
+    admin = next(
+        (line for line in in_v1.splitlines() if line.startswith("| Admin app")),
+        None)
+    assert admin, "Admin app row missing"
+    assert "not installed" in admin.lower()
+    assert "snapshots or printers" in admin.lower() or "no snapshots or printers" in admin.lower()
+
+
+def test_portal_backend_is_in_v1_not_planned():
+    in_v1, _, planned = _sections()
+    assert "Portal backend" in in_v1
+    assert "portal backend" not in planned.lower() or "Portal backend" not in planned
+    # The planned north-star lump must not still list it.
+    lump = next(
+        (line for line in planned.splitlines()
+         if line.startswith("| Workflow engine")),
+        None)
+    assert lump
+    assert "portal backend" not in lump.lower()
+
+
+def test_installable_iso_stays_cut_tester_raw_is_experimental():
+    in_v1, experimental, planned = _sections()
+    rows = _planned_rows()
+    iso = next((r for cap, r in rows.items() if cap.startswith("Installable ISO")), None)
+    assert iso and "Cut from v1" in iso
+    assert "Installable ISO" not in in_v1
+    assert "Tester disk image" in experimental
+    assert "raw.xz" in experimental
+    assert "Not a signed release" in experimental
+
+
+def test_selinux_row_does_not_claim_enforcing_on_the_tester_image():
+    in_v1, _, _ = _sections()
+    selinux = next(
+        (line for line in in_v1.splitlines() if line.startswith("| SELinux")),
+        None)
+    assert selinux
+    assert "permissive" in selinux.lower()
+    assert "lineage_enforce" in selinux
+    assert "defaults false" in selinux
+

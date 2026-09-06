@@ -25,19 +25,20 @@ Implemented, in scope, and going through the release verification passes.
 |---|---|
 | Tier 0–3 isolation | Direct, SELinux-confined, rootless-podman, and different-uid waypipe app isolation. Tier-1/2 spawn authorization moves out of shadow mode for the release. |
 | qdwin compositor | The libweston + Wayland compositor, with the §4b capture-global gate (screen-capture is shell-only, hidden from ordinary clients). |
-| Session stack | qdshell, qdgreeter, and qdlocker — login on tty3, an LXQt escape hatch on tty4, dynamic sessions on tty5+. |
-| Broker + admin approval | The permission arbiter: CheckPermission / RequestPermission, rules + hooks, the admin approval queue, and an append-only audit trail. |
+| Session stack | qdshell, qdgreeter, and qdlocker — login on tty3, dynamic sessions on tty5+. There is no tty4 LXQt escape hatch. |
+| Broker | CheckPermission / RequestPermission, rules + hooks, and an append-only audit trail. RequestPermission enqueues; the admin approval app is not an installer-chain step, so a bootstrap or tester image does not install an operator UI that can grant. |
 | Sessions / silo lifecycle | Create, start, stop, freeze, and egress changes for per-silo workloads. |
 | Password vault | The v1 password master-key vault. (The TPM-sealed v2 path is *experimental* — see below.) |
-| Printing | CUPS in an isolated VM. |
+| Printing | A host print proxy is installed. There is no isolated CUPS VM: the print-VM image is never built or started. |
 | Per-silo VPN | An interim host-netns backend. **What it does not protect:** 802.11, DHCP, and DNS parsing still run on the host kernel — the network-VM swap-in that closes this is post-v1. |
-| Templates + promotion | Build → probe → validate → gated promotion, with per-silo btrfs state snapshots and crash-consistent rollback. Lifecycle decisions are recorded **journal-first** (the journal plus on-disk evidence are the durable audit record). |
+| Templates | Template directories and an example tier-2 policy file are installed. The gated promotion operator flow (build → probe → validate → promote) is not a shipped UI. |
 | Browser bridge + extensions | A frozen v1 operation set — `ping` and `containers.*` only — with the Chrome-family and Firefox extensions. **How you install them in v1:** manually. There is no signed extension channel — the Chrome-family extension is loaded unpacked in developer mode, and the Firefox one is a temporary add-on that has to be re-loaded after every browser restart. See *Planned* below. |
 | Firefox containers | Round-trip container integration, relay, and CLI. |
 | Filesystem / rollback | Per-user btrfs subvolumes with Snapper rollback. **Not in v1:** the scheduled backup service, export UI, and restore pipeline — see *Planned* below. v1 does not promise automated backup or data-loss protection. |
 | First-party apps | qterminator, qnotebook, qfileman, and qdbrowser. |
-| SELinux policy | Tier-1 enforcing policy modules, with the `lineage_enforce` switchover landing for the release. |
-| Admin app | Rules, history, silos, snapshots, and printers. |
+| SELinux policy | Tier-1 policy modules ship. `lineage_enforce` defaults false and is not enabled by any installer. The tester image sets `SELINUX=permissive`. |
+| Admin app | The tree has Pending, Cache, Rules, History, Workflows, and Silos tabs. It is **not installed** by the bootstrap or the tester image. There are no snapshots or printers panels. |
+| Portal backend | xdg-desktop-portal backend — an unconditional installer-chain step. |
 
 ## Experimental in v1
 
@@ -46,7 +47,8 @@ them, but they carry stated prerequisites and unsupported-failure modes.
 
 | Capability | Why it's experimental |
 |---|---|
-| Tier-4/5 VM windows | waypipe-over-vsock VM app windows. Functional, but the cross-domain virtio-gpu story is a post-v1 north star. |
+| Tier-4/5 VM windows | waypipe-over-vsock VM app windows. Functional, but the cross-domain virtio-gpu story is a post-v1 north star. The tester image ships host launch code only; no guest image. |
+| Tester disk image (raw.xz) | Dev-profile kiwi OEM raw for USB sticks and VMs. Default password `qdistro`, sshd off, UEFI-only. Not a signed release. A real-stick hardware run is not yet recorded. See the [download page](@/download.md). |
 | TPM-sealed vault (v2) | Hardware-sealed master key. Engages only where the TPM path validates on reference hardware; otherwise the vault ships password-only. |
 
 ## Planned (not in v1)
@@ -58,11 +60,11 @@ none of them are enabled by the release install.
 |---|---|
 | Recall (capture + timeline) | **Cut from v1.** Capture and the viewer are disabled and the bridge `recall.push` op is off; the design is kept for a later version. |
 | Phone companion (presence / 2FA) | **Cut from v1.** Pairing/presence code stays in the tree but is **not installed or enabled** by the release bootstrap profile. |
-| Installable ISO image | **Cut from v1.** v1 installs from source via the bootstrap script; the image track (themes, firstboot, image gates) continues post-v1. |
+| Installable ISO image | **Cut from v1.** An install ISO is a wipe-the-disk installer and is post-v1. Tester releases are a raw disk image (Experimental above), not an ISO. |
 | Scheduled backup / export / restore | **Planned, not shipped.** The docs once described a backup timer, export UI, and restore pipeline as product behavior — none ship in v1. A signed-manifest *source* verify/restore primitive exists, but the end-to-end user backup story is later. |
 | Signed extension distribution | **Planned, not shipped.** No AMO-signed xpi, no production CRX signing key, no hosted `update.xml`, no usable force-install deployment (the policy scripts in the extension repos point at paths nothing populates), and no auto-update or revocation channel. v1 users verify the release manifest themselves, build the extension from the pinned source, and load it by hand — nothing checks the artifact at load time, and a security fix reaches them only when they rebuild and re-load it. |
 | Network VM swap-in | Planned. Moves 802.11/DHCP/DNS off the host kernel (see *Per-silo VPN* above). |
-| Workflow engine, portal backend, cross-machine RDP, scanner, virtual-camera ML, lineage store, manifest registry | Post-v1 north stars, deferred by design. |
+| Workflow engine, cross-machine RDP, scanner, virtual-camera ML, lineage store, manifest registry | Post-v1 north stars, deferred by design. |
 
 ---
 
