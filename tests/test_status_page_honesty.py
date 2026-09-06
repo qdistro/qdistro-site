@@ -136,14 +136,24 @@ def test_admin_app_is_not_installed_and_has_no_snapshots_printers_panels():
 def test_portal_backend_is_in_v1_not_planned():
     in_v1, _, planned = _sections()
     assert "Portal backend" in in_v1
-    assert "portal backend" not in planned.lower() or "Portal backend" not in planned
-    # The planned north-star lump must not still list it.
+    assert "portal backend" not in planned.lower()
     lump = next(
         (line for line in planned.splitlines()
          if line.startswith("| Workflow engine")),
         None)
     assert lump
     assert "portal backend" not in lump.lower()
+
+
+def test_templates_row_is_dirs_not_a_promotion_ui():
+    in_v1, _, _ = _sections()
+    templates = next(
+        (line for line in in_v1.splitlines() if line.startswith("| Templates")),
+        None)
+    assert templates, "Templates row missing from In v1"
+    assert "directories" in templates.lower() or "example" in templates.lower()
+    assert "not a shipped UI" in templates
+    assert "gated promotion" in templates.lower() or "promotion" in templates.lower()
 
 
 def test_installable_iso_stays_cut_tester_raw_is_experimental():

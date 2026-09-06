@@ -55,6 +55,7 @@ def test_checksum_before_write_and_no_fake_host():
     assert "No public download is published yet" in flat
     # Do not invent a 404 asset URL as if testers can fetch it today.
     assert "releases/download/" not in page
+    assert "latest/download" not in page
 
 
 def test_caveats_from_iso04():

@@ -99,7 +99,7 @@ Honest limits, so a first boot is not a surprise:
 - **No approval-queue UI.** The broker is installed. The admin app is
   not an installer-chain step, so permission requests can enqueue with
   nobody to grant them.
-- **No isolated print VM.** A host print proxy may be present; CUPS in
+- **No isolated print VM.** A host print proxy is installed; CUPS in
   a contained VM is not.
 - **No installable ISO.** This file is a disk image. It is the system,
   not an installer that targets another disk.
