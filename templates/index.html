@@ -40,7 +40,7 @@
         <span class="ladder-step">Goal 2</span>
         <div>
           <strong>Seamless windows across every boundary</strong>
-          <p>Containers and VMs do not present as a separate desktop session. Each silo runs a nested Wayland compositor; its windows arrive over <code>waypipe</code> and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows and the gVisor paravirt bridge are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
+          <p>Containers and VMs do not present as a separate desktop session. Silo windows reach the desktop over <code>waypipe</code> — via a nested Wayland compositor at the container/VM tiers, or a direct byte-stream bridge at the gVisor paravirt tier — and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows and the gVisor paravirt bridge are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
         </div>
       </li>
       <li>
