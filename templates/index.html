@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block description %}qdistro is a single-tenant Linux workstation with Qubes-inspired, tiered app isolation — SELinux, podman, and KVM — seamless windowing at every tier, and a modifiable Python/Qt/QML userspace. In development; tested in libvirt VMs.{% endblock %}
+{% block description %}qdistro is a single-tenant Linux workstation with Qubes-inspired, tiered app isolation — SELinux, podman, gVisor paravirt, and KVM — seamless windowing at every tier, and a modifiable Python/Qt/QML userspace. In development; tested in libvirt VMs.{% endblock %}
 
 {% block content %}
 {% set docs = config.extra.docs_url %}
@@ -33,14 +33,14 @@
         <span class="ladder-step">Goal 1</span>
         <div>
           <strong>Tiered isolation, chosen per app</strong>
-          <p>An isolation ladder from a confined <a href="{{ docs | safe }}/selinux.md">SELinux</a> context, through rootless <a href="{{ docs | safe }}/containers.md">podman</a> containers and separate uids, up to <a href="{{ docs | safe }}/isolation-tiers.md">KVM virtual machines</a>. Isolation strength is chosen per app, within admin policy.</p>
+          <p>An isolation ladder from a confined <a href="{{ docs | safe }}/selinux.md">SELinux</a> context, through rootless <a href="{{ docs | safe }}/containers.md">podman</a> containers and separate uids, up to <a href="{{ docs | safe }}/isolation-tiers.md">KVM virtual machines</a> — with an experimental <em>paravirt</em> rung where a workload's syscalls are served by the <a href="{{ docs | safe }}/isolation-tiers.md">gVisor application kernel</a> instead of the host kernel. Isolation strength is chosen per app, within admin policy.</p>
         </div>
       </li>
       <li>
         <span class="ladder-step">Goal 2</span>
         <div>
           <strong>Seamless windows across every boundary</strong>
-          <p>Containers and VMs do not present as a separate desktop session. Each silo runs a nested Wayland compositor; its windows arrive over <code>waypipe</code> and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
+          <p>Containers and VMs do not present as a separate desktop session. Each silo runs a nested Wayland compositor; its windows arrive over <code>waypipe</code> and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows and the gVisor paravirt bridge are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
         </div>
       </li>
       <li>
@@ -97,8 +97,6 @@
   </p>
   <pre><code># inside a fresh Tumbleweed Minimal/Server VM, as user "admin":
 git clone https://github.com/qdistro/qdistro.git
-git clone https://github.com/qdistro/qdwin.git
-git clone https://github.com/qdistro/qdshell.git
 cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh --profile=dev</code></pre>
   <p class="section-lede small">
     The explicit <code>--profile=dev</code> is required for this preview path.
@@ -128,21 +126,24 @@ QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</co
   <div class="wrap repos">
     <h2>Where things live</h2>
     <p class="section-lede">
-      qdistro is a set of small, focused repos rather than one monolith.
-      Architecture and component contracts live in the umbrella repo's
-      <a href="{{ docs | safe }}/overview.md">doc/</a> directory — the source of
-      truth this site deliberately does not duplicate.
+      qdistro is one <a href="https://github.com/qdistro/qdistro">monorepo</a>:
+      the distribution's own machinery — broker, daemons, session manager,
+      image and packaging, SELinux policy, CI, tests — alongside the
+      component directories below. Architecture and component contracts live
+      in its <a href="{{ docs | safe }}/overview.md">doc/</a> directory and
+      the per-component READMEs — the source of truth this site deliberately
+      does not duplicate.
     </p>
     <ul class="repo-list">
-      <li><a href="https://github.com/qdistro/qdistro">qdistro</a><span>Umbrella — docs, broker, daemons, SDK, admin app, SELinux policy, CI, tests</span></li>
-      <li><a href="https://github.com/qdistro/qdwin">qdwin</a><span>The Wayland compositor — a libweston shell plugin (mechanism, no policy)</span></li>
-      <li><a href="https://github.com/qdistro/qdshell">qdshell</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
-      <li><a href="https://github.com/qdistro/qdgreeter">qdgreeter</a><span>The greetd login screen</span></li>
-      <li><a href="https://github.com/qdistro/qdlocker">qdlocker</a><span>Screen locker with fingerprint unlock</span></li>
-      <li><a href="https://github.com/qdistro/qdbrowser">qdbrowser</a><span>Identity-pinned browser integration + extensions</span></li>
-      <li><a href="https://github.com/qterminator/qdterm">qterminator</a><span>Qt terminal (a port of Terminator)</span></li>
-      <li><a href="https://github.com/qnotebook/qnotebook">qnotebook</a><span>PyQt6 markdown wiki editor</span></li>
-      <li><a href="https://github.com/qdistro/qdfileman">qfileman</a><span>File manager with cross-silo send-to</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdwin">qdwin/</a><span>The Wayland compositor — a libweston shell plugin (mechanism, no policy)</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdshell">qdshell/</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdgreeter">qdgreeter/</a><span>The greetd login screen</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdlocker">qdlocker/</a><span>Screen locker with fingerprint unlock</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdbrowser">qdbrowser/</a><span>Identity-pinned browser integration + extensions</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdterm">qdterm/</a><span>qterminator, the Qt terminal (a port of Terminator)</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qnotebook">qnotebook/</a><span>PyQt6 markdown wiki editor</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdfileman">qdfileman/</a><span>qfileman, the file manager with cross-silo send-to</span></li>
+      <li><a href="https://github.com/qdistro/qdistro-site">qdistro-site</a><span>This website (Zola)</span></li>
     </ul>
   </div>
 </section>
