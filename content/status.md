@@ -23,7 +23,7 @@ Implemented, in scope, and going through the release verification passes.
 
 | Capability | What it is |
 |---|---|
-| Tier 0–3 isolation | Direct, SELinux-confined, rootless-podman, and different-uid waypipe app isolation. Tier-1/2 spawn authorization moves out of shadow mode for the release. |
+| Tier 0–3 isolation | Direct, SELinux-confined, rootless-podman, and different-uid waypipe app isolation. Tier-1/2 spawn authorization moves out of shadow mode for the release. (The gVisor paravirt rung, tier 3s, is *Experimental* below.) |
 | qdwin compositor | The libweston + Wayland compositor, with the §4b capture-global gate (screen-capture is shell-only, hidden from ordinary clients). |
 | Session stack | qdshell, qdgreeter, and qdlocker — login on tty3, dynamic sessions on tty5+. There is no tty4 LXQt escape hatch. |
 | Broker | CheckPermission / RequestPermission, rules + hooks, and an append-only audit trail. RequestPermission enqueues; the admin approval app is not an installer-chain step, so a bootstrap or tester image does not install an operator UI that can grant. |
@@ -48,6 +48,7 @@ them, but they carry stated prerequisites and unsupported-failure modes.
 | Capability | Why it's experimental |
 |---|---|
 | Tier-4/5 VM windows | waypipe-over-vsock VM app windows. Functional, but the cross-domain virtio-gpu story is a post-v1 north star. The tester image ships host launch code only; no guest image. |
+| Tier-3s paravirt (gVisor) | The paravirtualized rung: a silo workload runs under the gVisor `runsc` application kernel (systrap platform) in rootless podman as a dedicated `qt3s-<silo>` uid — its syscalls are served by the gVisor Sentry, not the host kernel. GUI windows reach the admin desktop over a waypipe byte-stream bridge (no fd passing across the gVisor boundary, software rendering, tagged `[3s:<silo>]`). Constraints: `network=none` only, dev profile only, explicit launch with no fallback to tiers 2/3, opt-in install (`QDISTRO_TIER3S=1`) that is absent from the tester image, and `runsc` itself is provisioned on demand from a pinned, hash-verified release. No KVM claim — the VM tiers above remain the stronger boundary. |
 | Tester disk image (raw.xz) | Dev-profile kiwi OEM raw for USB sticks and VMs. Default password `qdistro`, sshd off, UEFI-only. Not a signed release. A real-stick hardware run is not yet recorded. See the [download page](@/download.md). |
 | TPM-sealed vault (v2) | Hardware-sealed master key. Engages only where the TPM path validates on reference hardware; otherwise the vault ships password-only. |
 

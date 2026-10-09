@@ -63,6 +63,12 @@ That is stated honestly rather than papered over —
 
 - Tiers 0–3 are graduated *authority and code* confinement that **share host-kernel
   fate**. The **VM tiers** are where containment survives a host-kernel-quality bug.
+- The experimental **tier-3s paravirt** mode sits between those poles: a
+  workload's syscalls are served by the gVisor Sentry — an application kernel
+  — rather than the host kernel directly. That narrows the host-kernel attack
+  surface, but it is not a VM boundary (dev-profile only, `network=none`, no
+  KVM claim), and it does not change where the strongest containment claim
+  lives: the VM tiers.
 - Hardware-facing parsing (802.11 frames, Bluetooth, USB descriptors, printing) is
   migrating off the host into **device silos** as they land — printing first.
 - **v1 networking is interim:** a host-netns backend ships now; 802.11, DHCP, and

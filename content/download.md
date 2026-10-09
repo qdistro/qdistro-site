@@ -19,7 +19,7 @@ of their internal disk — qdistro does not ship that ISO.
 | sshd | Installed, **never enabled** |
 | Firmware | **UEFI-only**. Legacy BIOS/CSM will not boot |
 | Size | Raw is 28 GiB; **32 GB** minimum stick. USB 3 or an external SSD |
-| Isolation | Tiers 0–3 supported. Tiers 4 and 5 are experimental (host side only; no guest image in the download) |
+| Isolation | Tiers 0–3 supported. Tiers 4 and 5 are experimental (host side only; no guest image in the download). The tier-3s gVisor *paravirt* mode is opt-in and is not installed on this image |
 | Snapshot | The `<snapshot>` in the filename is the Tumbleweed `history/<YYYYMMDD>/` pin baked into the image |
 
 Signing is **post-v1**. There is no release signature and no signed
@@ -47,7 +47,7 @@ QDISTRO_PROFILE=dev ./build-in-vm.sh
 # bundle/qdistro-<version>-<snapshot>.raw.xz.sha256
 ```
 
-`build-in-vm.sh` needs the sibling checkouts and a libvirt session; see
+`build-in-vm.sh` needs a libvirt session; see
 [image/AGENTS.md](https://github.com/qdistro/qdistro/blob/main/image/AGENTS.md).
 Do not `dd` a file whose checksum does not match.
 
@@ -106,7 +106,12 @@ Honest limits, so a first boot is not a surprise:
 - **Tiers 4/5 experimental.** The chain installs host launch code only.
   Build a guest image on the booted system if you have KVM
   (`qdistro-bootstrap.sh --tier4-base`).
+- **No tier-3s paravirt.** The experimental gVisor application-kernel mode
+  is an opt-in install (`QDISTRO_TIER3S=1` on
+  `install-session-manager.sh`) and `runsc` is provisioned on demand —
+  nothing of it is on this image. Launches are dev-profile only,
+  `network=none`, and explicit; no KVM needed.
 - **Polkit agent cannot grant** as uid 1000; that path fails closed.
 
 From-source installs (Tumbleweed + bootstrap `--profile=dev`) stay on
-the [homepage](@/_index.md#try) for developers iterating the tree.
+the [homepage](https://qdistro.org/#try) for developers iterating the tree.
