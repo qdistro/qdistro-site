@@ -29,10 +29,12 @@ a meaningfully different failure shape than a plain container.
 ## What it looks like
 
 Each tier-3s silo gets a dedicated host account (`qt3s-<silo>`) that owns
-the podman store and the runsc state root — every podman/runsc call on the
-workload and launch path runs as that account, not as root or admin (root
-still provisions `runsc` and supervises the launch; admin drives the
-D-Bus calls and the host-side GUI bridge client). The workload gets a read-only root, no capabilities,
+the podman store and the runsc state root — every podman call and the
+workload's `runsc` run as that account. Root provisions `runsc`,
+supervises the launch and registers it with the broker; the only `runsc`
+root itself runs is the per-launch probe's hash-verified `--version`
+check. Admin makes the broker/resolver calls and runs the host-side GUI
+bridge client. The workload gets a read-only root, no capabilities,
 `no-new-privileges`, a per-workload seccomp profile, and `network=none` —
 the only network mode.
 
