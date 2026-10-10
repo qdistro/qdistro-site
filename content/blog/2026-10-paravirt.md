@@ -29,8 +29,10 @@ a meaningfully different failure shape than a plain container.
 ## What it looks like
 
 Each tier-3s silo gets a dedicated host account (`qt3s-<silo>`) that owns
-the podman store and the runsc state root — nothing runs podman or runsc
-as root or as admin. The workload gets a read-only root, no capabilities,
+the podman store and the runsc state root — every podman/runsc call on the
+workload and launch path runs as that account, not as root or admin (root
+still provisions `runsc` and supervises the launch; admin drives the
+D-Bus calls and the host-side GUI bridge client). The workload gets a read-only root, no capabilities,
 `no-new-privileges`, a per-workload seccomp profile, and `network=none` —
 the only network mode.
 
@@ -71,13 +73,14 @@ version mismatch.
 ## What it is not
 
 - **Not shipped.** Dev profile only; the launch path, the probe, and the
-  session manager all refuse anything else, and none of it is on the
-  tester image.
-- **Not a VM.** No KVM, no guest kernel — the VM tiers remain where
-  containment survives a host-kernel-quality bug.
+  session manager all refuse anything else, and the launch machinery is
+  not on the tester image.
+- **Not a VM.** No KVM, no virtualized guest kernel — the VM tiers remain
+  where containment survives a host-kernel-quality bug.
 - **Not networked.** `network=none` is the only mode.
 - **Not seamless magic.** The GUI bridge is a byte stream with software
-  rendering — fine for terminals and editors, not a GPU path.
+  rendering — the demonstrated workloads are terminal emulators; it is not
+  a GPU path.
 
 The contract and the tested lifecycle guarantees live in
 [`tier3s/`](https://github.com/qdistro/qdistro/tree/main/tier3s) — the

@@ -26,7 +26,7 @@ Implemented, in scope, and going through the release verification passes.
 | Tier 0–3 isolation | Direct, SELinux-confined, rootless-podman, and different-uid waypipe app isolation. Tier-1/2 spawn authorization moves out of shadow mode for the release. (The gVisor paravirt rung, tier 3s, is *Experimental* below.) |
 | qdwin compositor | The libweston + Wayland compositor, with the §4b capture-global gate (screen-capture is shell-only, hidden from ordinary clients). |
 | Session stack | qdshell, qdgreeter, and qdlocker — login on tty3, dynamic sessions on tty5+. There is no tty4 LXQt escape hatch. |
-| Broker | CheckPermission / RequestPermission, rules + hooks, and an append-only audit trail. RequestPermission enqueues; the admin approval app is not an installer-chain step, so a bootstrap or tester image does not install an operator UI that can grant. |
+| Broker | CheckPermission / RequestPermission, rules + hooks, and an append-only audit trail. RequestPermission enqueues; granting happens through the admin approval paths installed as an installer-chain step — the graphical approval queue, the `qdistro-approvals` CLI, and the admin TUI. |
 | Sessions / silo lifecycle | Create, start, stop, freeze, and egress changes for per-silo workloads. |
 | Password vault | The v1 password master-key vault. (The TPM-sealed v2 path is *experimental* — see below.) |
 | Printing | A host print proxy is installed. There is no isolated CUPS VM: the print-VM image is never built or started. |
@@ -37,7 +37,7 @@ Implemented, in scope, and going through the release verification passes.
 | Filesystem / rollback | Per-user btrfs subvolumes with Snapper rollback. **Not in v1:** the scheduled backup service, export UI, and restore pipeline — see *Planned* below. v1 does not promise automated backup or data-loss protection. |
 | First-party apps | qterminator, qnotebook, qfileman, and qdbrowser. |
 | SELinux policy | Tier-1 policy modules ship. `lineage_enforce` defaults false and is not enabled by any installer. The tester image sets `SELINUX=permissive`. |
-| Admin app | The tree has Pending, Cache, Rules, History, Workflows, and Silos tabs. It is **not installed** by the bootstrap or the tester image. There are no snapshots or printers panels. |
+| Admin app | The tree has Pending, Cache, Rules, History, Workflows, and Silos tabs. The graphical approval queue installs as an installer-chain step — on the bootstrap and the tester image — alongside the non-graphical `qdistro-approvals` CLI and admin TUI. There are no snapshots or printers panels. |
 | Portal backend | xdg-desktop-portal backend — an unconditional installer-chain step. |
 
 ## Experimental in v1

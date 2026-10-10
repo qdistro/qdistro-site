@@ -96,9 +96,10 @@ Honest limits, so a first boot is not a surprise:
 
 - **Not a signed v1.** Shared default password, dev profile, SELinux
   **permissive** on this image.
-- **No approval-queue UI.** The broker is installed. The admin app is
-  not an installer-chain step, so permission requests can enqueue with
-  nobody to grant them.
+- **Approvals are local.** The broker is installed with its approval
+  paths — the graphical approval-queue app, the `qdistro-approvals`
+  CLI, and the admin TUI. Granting still happens at the admin desktop;
+  there is no remote or programmatic grant path.
 - **No isolated print VM.** A host print proxy is installed; CUPS in
   a contained VM is not.
 - **No installable ISO.** This file is a disk image. It is the system,
@@ -109,8 +110,9 @@ Honest limits, so a first boot is not a surprise:
 - **No tier-3s paravirt.** The experimental gVisor application-kernel mode
   is an opt-in install (`QDISTRO_TIER3S=1` on
   `install-session-manager.sh`) and `runsc` is provisioned on demand —
-  nothing of it is on this image. Launches are dev-profile only,
-  `network=none`, and explicit; no KVM needed.
+  the launch machinery is not on this image (the silo-creation method in
+  the session manager exists but refuses without it). Launches are
+  dev-profile only, `network=none`, and explicit; no KVM needed.
 - **Polkit agent cannot grant** as uid 1000; that path fails closed.
 
 From-source installs (Tumbleweed + bootstrap `--profile=dev`) stay on
