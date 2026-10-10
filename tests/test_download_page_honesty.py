@@ -62,7 +62,7 @@ def test_caveats_from_iso04():
     page = _page()
     flat = _flat()
     for needle in (
-        "No approval-queue UI",
+        "Approvals are local",
         "No isolated print VM",
         "permissive",
         "Polkit agent cannot grant",

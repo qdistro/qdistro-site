@@ -40,7 +40,7 @@
         <span class="ladder-step">Goal 2</span>
         <div>
           <strong>Seamless windows across every boundary</strong>
-          <p>Containers and VMs do not present as a separate desktop session. Silo windows reach the desktop over <code>waypipe</code> — via a nested Wayland compositor at the container/VM tiers, or a direct byte-stream bridge at the gVisor paravirt tier — and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows and the gVisor paravirt bridge are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
+          <p>Containers and VMs do not present as a separate desktop session. Silo windows reach the desktop through the tier's bridge — a nested Wayland compositor at the container tier, <code>waypipe</code> at the different-uid and VM tiers, a byte-stream bridge at the gVisor paravirt tier — and land on one desktop, tagged and placed by the admin <a href="{{ docs | safe }}/compositor.md">compositor</a>, with silo identity carried by trusted chrome. Lower tiers ship today; VM windows and the gVisor paravirt bridge are <a href="{{ get_url(path='@/status.md') }}">experimental</a>.</p>
         </div>
       </li>
       <li>
@@ -114,7 +114,9 @@ cd qdistro && sudo bash scripts/install/qdistro-bootstrap.sh --profile=dev</code
     <code>QCI_AGENT_CMD</code>; without one they are recorded as blocked.
   </p>
   <pre><code>ci/bin/qci preflight                          # check libvirt + host tools
-QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</code></pre>
+# the sanctioned visual runner, pinned (see ci/README.md):
+QCI_AGENT_CMD='codex --yolo exec -m gpt-5.6-luna -c model_reasoning_effort=medium --skip-git-repo-check - &lt; {prompt}' \
+QCI_AGENT_MODEL=gpt-5.6-luna ci/bin/qci gui   # run in foreground</code></pre>
   <p class="section-lede small">
     Gate reference, agent-command templating, and triage workflow:
     <a href="{{ config.extra.repo_url }}/blob/main/ci/README.md">ci/README.md</a>.
@@ -139,7 +141,8 @@ QCI_AGENT_CMD='your-agent-cli {prompt}' ci/bin/qci gui   # run in foreground</co
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qdshell">qdshell/</a><span>The desktop shell — panels, tray, admin overlays (Noctalia QML fork)</span></li>
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qdgreeter">qdgreeter/</a><span>The greetd login screen</span></li>
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qdlocker">qdlocker/</a><span>Screen locker with fingerprint unlock</span></li>
-      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdbrowser">qdbrowser/</a><span>Identity-pinned browser integration + extensions</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdbrowser">qdbrowser/</a><span>First-party browser (PyQt6 + QtWebEngine) with identity-pinned bridge integration</span></li>
+      <li><a href="https://github.com/qdistro/qdistro/tree/main/qdchrome-extension">qdchrome-extension/</a> + <a href="https://github.com/qdistro/qdistro/tree/main/qdfirefox-extension">qdfirefox-extension/</a><span>Browser-bridge extensions (unpacked / temporary add-on installs in v1)</span></li>
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qdterm">qdterm/</a><span>qterminator, the Qt terminal (a port of Terminator)</span></li>
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qnotebook">qnotebook/</a><span>PyQt6 markdown wiki editor</span></li>
       <li><a href="https://github.com/qdistro/qdistro/tree/main/qdfileman">qdfileman/</a><span>qfileman, the file manager with cross-silo send-to</span></li>

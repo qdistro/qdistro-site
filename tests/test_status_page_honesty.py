@@ -123,13 +123,17 @@ def test_printing_is_not_an_isolated_cups_vm():
     assert "CUPS in an isolated VM" not in printing
 
 
-def test_admin_app_is_not_installed_and_has_no_snapshots_printers_panels():
+def test_admin_app_installs_as_chain_step_and_has_no_snapshots_printers_panels():
+    # installer_chain_entries (scripts/install/qdistro-bootstrap.sh) lists
+    # admin-app, so a claim that it is "not installed" is stale — the page
+    # must say the approval paths land, and still bound the panel scope.
     in_v1, _, _ = _sections()
     admin = next(
         (line for line in in_v1.splitlines() if line.startswith("| Admin app")),
         None)
     assert admin, "Admin app row missing"
-    assert "not installed" in admin.lower()
+    assert "not installed" not in admin.lower()
+    assert "installer-chain" in admin.lower()
     assert "snapshots or printers" in admin.lower() or "no snapshots or printers" in admin.lower()
 
 
