@@ -19,7 +19,7 @@ of their internal disk — qdistro does not ship that ISO.
 | sshd | Installed, **never enabled** |
 | Firmware | **UEFI-only**. Legacy BIOS/CSM will not boot |
 | Size | Raw is 28 GiB; **32 GB** minimum stick. USB 3 or an external SSD |
-| Isolation | Tiers 0–3 supported. Tiers 4 and 5 are experimental (host side only; no guest image in the download). The tier-3s gVisor *paravirt* mode is opt-in and is not installed on this image |
+| Isolation | Tiers 0–3 supported. Tiers 4 and 5 are experimental (host side only; no guest image in the download). The tier-3s gVisor *paravirt* mode is opt-in and its launch path is not installed on this image |
 | Snapshot | The `<snapshot>` in the filename is the Tumbleweed `history/<YYYYMMDD>/` pin baked into the image |
 
 Signing is **post-v1**. There is no release signature and no signed
@@ -98,8 +98,9 @@ Honest limits, so a first boot is not a surprise:
   **permissive** on this image.
 - **Approvals are local.** The broker is installed with its approval
   paths — the graphical approval-queue app, the `qdistro-approvals`
-  CLI, and the admin TUI. Granting still happens at the admin desktop;
-  there is no remote or programmatic grant path.
+  CLI, and the admin TUI. Grants come only from local admin
+  control-plane peers (those tools, or an admin/root D-Bus client such
+  as `busctl`); sshd is off on this image, so there is no remote path.
 - **No isolated print VM.** A host print proxy is installed; CUPS in
   a contained VM is not.
 - **No installable ISO.** This file is a disk image. It is the system,
@@ -110,9 +111,10 @@ Honest limits, so a first boot is not a surprise:
 - **No tier-3s paravirt.** The experimental gVisor application-kernel mode
   is an opt-in install (`QDISTRO_TIER3S=1` on
   `install-session-manager.sh`) and `runsc` is provisioned on demand —
-  the launch machinery is not on this image (the silo-creation method in
-  the session manager exists but refuses without it). Launches are
-  dev-profile only, `network=none`, and explicit; no KVM needed.
+  the launch machinery is not on this image (a `CreateTier3sSilo` call
+  would succeed on this dev-profile image; `StartSilo` fails without the
+  launch path). Launches are dev-profile only,
+  `network=none`, and explicit; no KVM needed.
 - **Polkit agent cannot grant** as uid 1000; that path fails closed.
 
 From-source installs (Tumbleweed + bootstrap `--profile=dev`) stay on
